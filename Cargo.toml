@@ -1,0 +1,92 @@
+[package]
+name = "tokio"
+# When releasing to crates.io:
+# - Remove path dependencies
+# - Update doc url
+#   - Cargo.toml
+#   - README.md
+# - Update CHANGELOG.md.
+# - Create "v1.0.x" git tag.
+version = "1.7.1"
+edition = "2018"
+authors = ["Tokio Contributors <team@tokio.rs>"]
+license = "MIT"
+readme = "README.md"
+documentation = "https://docs.rs/tokio/1.7.0/tokio/"
+repository = "https://github.com/tokio-rs/tokio"
+homepage = "https://tokio.rs"
+description = """
+An event-driven, non-blocking I/O platform for writing asynchronous I/O
+backed applications.
+"""
+categories = ["asynchronous", "network-programming"]
+keywords = ["io", "async", "non-blocking", "futures"]
+
+[features]
+# Include nothing by default
+default = []
+
+# enable everything
+full = [
+  "io-util",
+  "io-std",
+  "net",
+  "parking_lot",
+  "rt",
+  "signal",
+  "sync",
+  "time",
+]
+
+io-util = ["memchr", "bytes"]
+# stdin, stdout, stderr
+io-std = []
+net = [
+  "libc",
+  "mio/os-poll",
+  "mio/os-util",
+  "mio/tcp",
+  "mio/udp",
+  "mio/uds",
+]
+# Includes basic task execution capabilities
+rt = []
+signal = [
+  "once_cell",
+  "libc",
+  "mio/os-poll",
+  "mio/uds",
+  "mio/os-util",
+  "signal-hook-registry",
+]
+sync = []
+test-util = []
+time = []
+macros = []
+
+[dependencies]
+tokio-macros = "1.2.0"
+pin-project-lite = "0.2.0"
+
+# Everything else is optional...
+bytes = { version = "1.0.0", optional = true }
+once_cell = { version = "1.5.2", optional = true }
+memchr = { version = "2.2", optional = true }
+mio = { version = "0.7.6", optional = true }
+parking_lot = { version = "0.11.0", optional = true }
+
+[target.'cfg(unix)'.dependencies]
+libc = { version = "0.2.42", optional = true }
+signal-hook-registry = { version = "1.1.1", optional = true }
+
+[target.'cfg(unix)'.dev-dependencies]
+libc = { version = "0.2.42" }
+nix = { version = "0.19.0" }
+
+[dev-dependencies]
+futures = { version = "0.3.0", features = ["async-await"] }
+proptest = "1"
+rand = "0.8.0"
+tempfile = "3.1.0"
+async-stream = "0.3"
+socket2 = "0.4"
